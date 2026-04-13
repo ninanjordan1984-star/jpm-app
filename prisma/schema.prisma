@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  city        String
+  state       String
+  zip         String
+  type        String
+  bedrooms    Int?
+  bathrooms   Float?
+  sqft        Int?
+  rentAmount  Float
+  description String?
+  status      String   @default("available")
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  leases   Lease[]
+  expenses Expense[]
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leases Lease[]
+}
+
+model Lease {
+  id         String   @id @default(cuid())
+  propertyId String
+  tenantId   String
+  startDate  DateTime
+  endDate    DateTime
+  rentAmount Float
+  deposit    Float?
+  status     String   @default("active")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  property Property  @relation(fields: [propertyId], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  payments Payment[]
+}
+
+model Payment {
+  id        String    @id @default(cuid())
+  leaseId   String
+  amount    Float
+  dueDate   DateTime
+  paidDate  DateTime?
+  status    String    @default("pending")
+  notes     String?
+  createdAt DateTime  @default(now())
+
+  lease Lease @relation(fields: [leaseId], references: [id])
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  propertyId  String
+  category    String
+  description String
+  amount      Float
+  date        DateTime
+  createdAt   DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
