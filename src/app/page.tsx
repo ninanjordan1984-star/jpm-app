@@ -29,9 +29,46 @@ const services = [
   },
 ]
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "JPM Property Management",
+  "description": "Professional property management services in Kansas City, MO including tenant screening, rent collection, lease administration, property maintenance, and owner communication.",
+  "url": "https://www.jpmanagment.com",
+  "telephone": "+19132073239",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kansas City",
+    "addressRegion": "MO",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 39.0997,
+    "longitude": -94.5786
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Kansas City"
+  },
+  "serviceType": [
+    "Property Management",
+    "Tenant Screening",
+    "Rent Collection",
+    "Lease Administration",
+    "Property Maintenance"
+  ],
+  "openingHours": "Mo-Fr 09:00-17:00",
+  "priceRange": "$$"
+}
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
